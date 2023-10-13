@@ -20,9 +20,32 @@ let io=socket(server,{
 })
 io.on("connection",(socket)=>{
     console.log("Connected:",socket.id);
-    // socket.emit("response",()=>{
-
+    socket.emit('newMessage',{
+        from:"Admin",
+        text:"Welcome to chat",
+        createdAt:new Date().getTime()
+    })
+    socket.broadcast.emit("newMessage",{
+        from :"Admin",
+        text:"New user joined",
+        date:new Date().getTime()
+    })
+    // socket.on('createMessage',(message)=>{
+    //     console.log("CreateMessage:",message);
+    //     io.emit("newMessage",{
+    //         name:"Nikhil",
+    //         msg:"New"
+    //     })
+    //     socket.broadcast.emit("newMessage",{
+    //         name:"Nikhil",
+    //         msg:"hii",
+    //         date:Date.now()
+    //     })
     // })
+    
+    socket.on('disconnect',()=>{
+        console.log("User disconnected");
+    })
 })
 
 
