@@ -6,6 +6,7 @@ const socket=require('socket.io')
 const cors=require('cors')
 const port=process.env.PORT ||8000
 const publicPath=path.join(__dirname,'/../public')
+const {generateMessage, generateLocationMessage}=require('./utils/message')
 // console.log(__dirname+"/../public");
 // console.log();
 const app=express();
@@ -20,30 +21,22 @@ let io=socket(server,{
 })
 io.on("connection",(socket)=>{
     console.log("Connected:",socket.id);
-    socket.emit('newMessage',{
-        from:"Admin",
-        text:"Welcome to chat",
-        createdAt:new Date().getTime()
+    socket.emit('newMessage',generateMessage('Admin',"Welcome to the chat"))
+    socket.broadcast.emit("newMessage",generateMessage('Admin',"New User joined"))
+    socket.on('createMessage',(message,callback)=>{
+        // console.log("CreateMessage:",message);
+        // console.log(message.text)
+        console.log(message);
+        socket.broadcast.emit("newMessage",generateMessage(message.from,message.text))
+        callback("Message Sent");
     })
-    socket.broadcast.emit("newMessage",{
-        from :"Admin",
-        text:"New user joined",
-        date:new Date().getTime()
+
+    socket.on("createLocation",(location)=>{
+        socket.broadcast.emit("newLocationMessage",generateLocationMessage('Admin',location.lat,location.lon))
     })
-    // socket.on('createMessage',(message)=>{
-    //     console.log("CreateMessage:",message);
-    //     io.emit("newMessage",{
-    //         name:"Nikhil",
-    //         msg:"New"
-    //     })
-    //     socket.broadcast.emit("newMessage",{
-    //         name:"Nikhil",
-    //         msg:"hii",
-    //         date:Date.now()
-    //     })
-    // })
     
     socket.on('disconnect',()=>{
+        socket.broadcast.emit("newMessage",generateMessage('Admin',"User left the chat"))
         console.log("User disconnected");
     })
 })
