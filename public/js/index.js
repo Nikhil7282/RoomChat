@@ -1,3 +1,4 @@
+
 let socket = io();
 // const message={
 //     from :"Nikhil",
@@ -12,18 +13,24 @@ socket.on("connect", () => {
 // })
 
 socket.on("newMessage",(message)=>{
-  console.log(message);
-  let li=document.createElement('li')
-  li.innerText=`${message.from}:${message.text}`
-  document.querySelector('body').appendChild(li)
+  const template=document.querySelector('#message-template').innerHTML
+  const html=Mustache.render(html)
+  document.querySelector('#messages').append(html)
+    // const formattedTime=moment(message.createdAt).format('LT')
+  // console.log(message);
+  // let li=document.createElement('li')
+  // li.innerText=`${message.from} ${formattedTime}:${message.text}`
+  // document.querySelector('body').appendChild(li)
 })
 socket.on("newLocationMessage",(message)=>{
+  const formattedTime=moment(message.createdAt).format('LT')
   console.log(message);
   let li=document.createElement('li')
   let a=document.createElement('a')
+  li.innerText=`${message.from} ${formattedTime}:`
   a.setAttribute('target','_blank')
   a.setAttribute('href',message.url)
-  a.innerHTML=`${message.from}:My Current Location`
+  a.innerHTML=`My Current Location`
   li.appendChild(a)
   document.querySelector('body').appendChild(li)
 })
@@ -31,7 +38,7 @@ socket.on("newLocationMessage",(message)=>{
 socket.on("disconnect", () => {
   console.log("Disconnected from server");
 });
-document.querySelector('#submit').addEventListener('click',(e)=>{
+document.querySelector('#submit-btn').addEventListener('click',(e)=>{
   e.preventDefault()
   socket.emit('createMessage',{
     from:"User",

@@ -3,17 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css"/>
     <title>Document</title>
 </head>
-<body>
-    <p>Welcome to chatApp</p>
-    <form class="" id="message-form">
-        <input type="text" placeholder="message" name="message">
-        <button type="submit" id="submit">Submit</button>
-    </form>
+<body class="chat">
+    <div class="chat__sidebar">
+        <h3>People</h3>
+        <div id="users"></div>
+      </div>
+  
+      <div class="chat__main">
+        <ol id="messages" class="chat__messages"></ol>
+  
+        <div class="chat__footer">
+          <form id="message-form">
+            <input name="message" type="text" placeholder="Message" autofocus autocomplete="off"/>
+            <button id="submit-btn">Send</button>
+          </form>
+          <button id="send-location">Send location</button>
+        </div>
+      </div>
+    <script type="text/template" id="message-template">
+        <p>This is a paragraph</p>
+    </script>
 
-    <button type="button" id="sendLocation">Send-Location</button>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./js/index.js"></script>
+    <script src="./js/libs//moment.js"></script>
+    <script src="./js/libs//mustache.js"></script>
 </body>
 </html>
