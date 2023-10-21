@@ -14,8 +14,15 @@ socket.on("connect", () => {
 
 socket.on("newMessage",(message)=>{
   const template=document.querySelector('#message-template').innerHTML
-  const html=Mustache.render(html)
-  document.querySelector('#messages').append(html)
+  // console.log(template);
+  const html=Mustache.render(template,{
+    from:message.from,
+    text:message.text,
+    createdAt:moment(message.createdAt).format('LT')
+  })
+  const div=document.createElement('div')
+  div.innerHTML=html
+  document.querySelector('#messages').appendChild(div)
     // const formattedTime=moment(message.createdAt).format('LT')
   // console.log(message);
   // let li=document.createElement('li')
@@ -25,14 +32,24 @@ socket.on("newMessage",(message)=>{
 socket.on("newLocationMessage",(message)=>{
   const formattedTime=moment(message.createdAt).format('LT')
   console.log(message);
-  let li=document.createElement('li')
-  let a=document.createElement('a')
-  li.innerText=`${message.from} ${formattedTime}:`
-  a.setAttribute('target','_blank')
-  a.setAttribute('href',message.url)
-  a.innerHTML=`My Current Location`
-  li.appendChild(a)
-  document.querySelector('body').appendChild(li)
+
+  const template=document.querySelector('#location-message-template').innerHTML
+  const html=Mustache.render(template,{
+    from:message.from,
+    url:message.url,
+    createdAt:formattedTime
+  })
+  const div=document.createElement('div')
+  div.innerHTML=html
+  document.querySelector('#messages').appendChild(div)
+  // let li=document.createElement('li')
+  // let a=document.createElement('a')
+  // li.innerText=`${message.from} ${formattedTime}:`
+  // a.setAttribute('target','_blank')
+  // a.setAttribute('href',message.url)
+  // a.innerHTML=`My Current Location`
+  // li.appendChild(a)
+  // document.querySelector('body').appendChild(li)
 })
 
 socket.on("disconnect", () => {
