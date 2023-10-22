@@ -1,9 +1,32 @@
+const params=window.location.search
+// console.log(params);
+const query=new URLSearchParams(params)
+const data=JSON.stringify(Object.fromEntries(query))
+console.log(data);
 
 let socket = io();
 // const message={
 //     from :"Nikhil",
 //     text:"Hi bro"
 // }
+
+socket.emit("joinRoom",data,(err)=>{
+  if(err){
+    alert('Invalid Inputs')
+    window.location.href='/'
+  }
+  else{
+    console.log("No Error");
+  }
+})
+
+
+
+function scrollToBottom(){
+  let messages=document.querySelector('#messages').lastElementChild
+  messages.scrollIntoView();
+  // console.log(messages);
+}
 
 socket.on("connect", () => {
   console.log("Connected To server");
@@ -28,6 +51,7 @@ socket.on("newMessage",(message)=>{
   // let li=document.createElement('li')
   // li.innerText=`${message.from} ${formattedTime}:${message.text}`
   // document.querySelector('body').appendChild(li)
+  scrollToBottom()
 })
 socket.on("newLocationMessage",(message)=>{
   const formattedTime=moment(message.createdAt).format('LT')
@@ -50,6 +74,7 @@ socket.on("newLocationMessage",(message)=>{
   // a.innerHTML=`My Current Location`
   // li.appendChild(a)
   // document.querySelector('body').appendChild(li)
+  scrollToBottom()
 })
 
 socket.on("disconnect", () => {
