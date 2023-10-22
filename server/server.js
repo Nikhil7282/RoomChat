@@ -21,6 +21,10 @@ let io=socket(server,{
 })
 io.on("connection",(socket)=>{
     console.log("Connected:",socket.id);
+    socket.on('joinRoom',(params,callback)=>{
+        
+    })
+
     socket.emit('newMessage',generateMessage('Admin',"Welcome to the chat"))
     socket.broadcast.emit("newMessage",generateMessage('Admin',"New User joined"))
     socket.on('createMessage',(message,callback)=>{
