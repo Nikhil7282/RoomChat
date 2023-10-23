@@ -1,10 +1,10 @@
+let socket = io();
+
 const params=window.location.search
 // console.log(params);
 const query=new URLSearchParams(params)
 const data=JSON.stringify(Object.fromEntries(query))
-console.log(data);
-
-let socket = io();
+console.log(JSON.parse(data).name);
 // const message={
 //     from :"Nikhil",
 //     text:"Hi bro"
@@ -12,7 +12,7 @@ let socket = io();
 
 socket.emit("joinRoom",data,(err)=>{
   if(err){
-    alert('Invalid Inputs')
+    alert(err)
     window.location.href='/'
   }
   else{
@@ -53,6 +53,20 @@ socket.on("newMessage",(message)=>{
   // document.querySelector('body').appendChild(li)
   scrollToBottom()
 })
+
+socket.on('updateUserList',(users)=>{
+  let ol=document.createElement('ol')
+  users.forEach((user)=>{
+    let li=document.createElement('li')
+    li.innerHTML=user
+    ol.appendChild(li)
+  })
+  let userList=document.querySelector('#users')
+  userList.innerHTML=""
+  userList.appendChild(ol)
+  console.log(users);
+})
+
 socket.on("newLocationMessage",(message)=>{
   const formattedTime=moment(message.createdAt).format('LT')
   console.log(message);
@@ -77,13 +91,10 @@ socket.on("newLocationMessage",(message)=>{
   scrollToBottom()
 })
 
-socket.on("disconnect", () => {
-  console.log("Disconnected from server");
-});
 document.querySelector('#submit-btn').addEventListener('click',(e)=>{
   e.preventDefault()
   socket.emit('createMessage',{
-    from:"User",
+    from:`${JSON.parse(data).name}`,
     text:document.querySelector('input[name="message"]').value
   },(message)=>{console.log(message)})
 })
@@ -102,3 +113,8 @@ document.querySelector('#sendLocation').addEventListener('click',(e)=>{
     alert("Unable to fetch loaction")
   })
 })
+
+
+socket.on("disconnect", () => {
+  console.log("Disconnected from server");
+});
