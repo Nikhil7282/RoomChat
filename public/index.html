@@ -19,15 +19,30 @@
             </div>
             <div class="form-field">
                 <label>Room Name</label>
-                <input type="text" name="room" autofocus/>
+                <input type="text" name="room" id="room" autofocus/>
+                <!-- <button style="margin-top: 5px;">Copy Room-Name</button> -->
             </div>
             <div class="form-field">
+                <button onclick="copyText()" style="margin-bottom: 5px;">
+                    Copy RoomID
+                </button>
                 <button>
                     Join Room
                 </button>
             </div>
         </form>
     </div>
+    <script>
+        const copyText=async()=>{
+            let input =document.getElementById("room")
+            try {
+                await navigator.clipboard.writeText(input.value)
+                alert("Text Copied") 
+            } catch (error) {
+                console.log(error);
+            }
+        } 
+    </script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./js/libs//moment.js"></script>
 

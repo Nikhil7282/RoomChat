@@ -42,6 +42,7 @@ io.on("connection",(socket)=>{
         // console.log(users);
         // console.log(users.getUserList(params.room));
         io.to(params.room).emit("updateUserList",users.getUserList(params.room))
+        // io.to(params.room).emit("userCount",users.count)
         socket.emit('newMessage',generateMessage('Admin',`Welcome to ${params.room}`))
         socket.broadcast.to(params.room).emit("newMessage",generateMessage('Admin',"New User joined"))
     })

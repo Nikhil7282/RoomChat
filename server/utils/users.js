@@ -1,10 +1,12 @@
 class Users{
     constructor() {
         this.users=[]
+        this.count=0
     }
     addUser(id,name,room){
         let user={id,name,room}
         this.users.push(user)
+        this.count++;
         return user
     }
     getUserList(room){
@@ -22,6 +24,7 @@ class Users{
         let user=this.getUser(id)
         if(user){
             this.users=this.users.filter(user=>user.id!==id)
+            this.count--;
         }
         return user
     }

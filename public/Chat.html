@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css"/>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.0/socket.io.min.js"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
     <title>Document</title>
 </head>
@@ -14,7 +13,16 @@
         <div id="users">
           
         </div>
+        <div>
+          <button id="exit-chat">Exit the Chat</button>
+        </div>
       </div>
+
+      <dialog class="modal" id="modal">
+          <div class="modalElement">Do you want to leave the room?</div>
+          <button data-close-modal style="margin-right: 10px;">Yes</button>
+          <button data-close-modal >No</button>
+      </dialog>
   
       <div class="chat__main">
         <ol id="messages" class="chat__messages">
