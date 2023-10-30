@@ -5,10 +5,7 @@ const params=window.location.search
 const query=new URLSearchParams(params)
 const data=JSON.stringify(Object.fromEntries(query))
 console.log(JSON.parse(data).name);
-// const message={
-//     from :"Nikhil",
-//     text:"Hi bro"
-// }
+
 
 socket.emit("joinRoom",data,(err)=>{
   if(err){
@@ -19,8 +16,6 @@ socket.emit("joinRoom",data,(err)=>{
     console.log("No Error");
   }
 })
-
-
 
 function scrollToBottom(){
   let messages=document.querySelector('#messages').lastElementChild
@@ -53,6 +48,10 @@ socket.on("newMessage",(message)=>{
   // document.querySelector('body').appendChild(li)
   scrollToBottom()
 })
+
+// socket.on('userCount',(count)=>{
+//   console.log(count);
+// })
 
 socket.on('updateUserList',(users)=>{
   let ol=document.createElement('ol')
@@ -97,6 +96,7 @@ document.querySelector('#submit-btn').addEventListener('click',(e)=>{
     from:`${JSON.parse(data).name}`,
     text:document.querySelector('input[name="message"]').value
   },(message)=>{console.log(message)})
+  document.querySelector('input[name="message"]').value=""
 })
 
 document.querySelector('#sendLocation').addEventListener('click',(e)=>{
@@ -114,6 +114,33 @@ document.querySelector('#sendLocation').addEventListener('click',(e)=>{
   })
 })
 
+const modelOpen=document.querySelector("#exit-chat")
+// console.log(modelOpen);
+const modelClose=document.querySelectorAll("[data-close-modal]")
+const model=document.querySelector(".modal")
+
+modelOpen.addEventListener('click',()=>{
+  model.showModal()
+})
+modelClose[0].addEventListener('click',()=>{
+  model.close()
+  window.location.href="/"
+})
+modelClose[1].addEventListener('click',()=>{
+  model.close()
+})
+
+
+
+
+// document.querySelector('#exit-chat').addEventListener('click',()=>{
+//   if(confirm("Do you want to exit the chat?")){
+//     window.location.href="/"
+//   }
+//   else{
+//     return;
+//   }
+// })
 
 socket.on("disconnect", () => {
   console.log("Disconnected from server");
